@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import axios from "axios";
 
 /** @jsx jsx */
 import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui";
 import { Flex, Box, Button, Text, Image, Spinner, Grid, Input } from "@theme-ui/components";
 import Theme from "./theme"
-
-
 
 
 let App;
@@ -32,8 +29,6 @@ const ContextProvider = ({ children }) => {
 };
 
 // -----------------------------------------------------------------------------
-
-
 // -----------------------------------------------------------------------------
 
 const Info = props => {
@@ -48,49 +43,6 @@ const Info = props => {
 // ---------------
 
 
-  // let Logger = async function (props) {
-  //   let axapi = await axios({
-  //     method: "get",
-  //     headers: { 'Access-Control-Allow-Origin': '*'},
-  //     url: "/loginp",
-  //     baseURL: server,
-  //     params: {
-  //       username: LoginName,
-  //       password: LoginPass,
-  //     }
-  //   });
-
-  //    await setUserId(axapi.data._id)
-  //    await setUserName(axapi.data.username)
-  // }
-
-
-  // let Logout = async function (props) {
-  //   let axapi = await axios({
-  //     method: "get",
-  //     headers: { 'Access-Control-Allow-Origin': '*'},
-  //     url: "/logout",
-  //     baseURL: server,
-  //   });
-
-  //   await setUserId(0)
-  //   await setUserName("")
-  // }
-
-
-  // const useChange = (Field, setField) => {
-  //   return {
-  //     name: Field,
-  //     value: Field,
-  //     fontSize: 1,
-  //     color: "#595959",
-  //     bg: "#DCDCDC",
-  //     onChange: e => {
-  //       setField(e.target.value);
-  //     }
-  //   }
-  // }
-
 
 // ------------
 
@@ -103,15 +55,9 @@ const Info = props => {
 
       <Flex  sx={{width: "100%" }}>
 
-        {Loading ? <Spinner size={17} ml={3} /> : 
-
-          <Grid bg="WhiteSmoke" >
-
-            <Flex sx={{ width: "100%" }}>
-
-              <Box sx={{ width: "100%" }}>
-
-
+        <Grid bg="WhiteSmoke" >
+          <Flex sx={{ width: "100%" }}>
+            <Box sx={{ width: "100%" }}>
               <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
                 <Box sx={{ width: "20%"}}>
                   <Text sx={Estilo.h2b} >Tel</Text>
@@ -121,7 +67,6 @@ const Info = props => {
                 </Box>
               </Flex>
 
-
               <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
                 <Box sx={{ width: "20%"}}>
                   <Text sx={Estilo.h2b} >Pass</Text>
@@ -130,53 +75,32 @@ const Info = props => {
                   <Input {...props.useAcciones.useChange(LoginPass, setLoginPass)}/>
                 </Box>
               </Flex>
+            </Box>
+          </Flex>
 
-              </Box>
+          <Flex sx={{ width: "100%" }}>
 
-            </Flex>
+            <Box sx={{ width: "70%" }}>
+              <Button sx={{ width: "100%", height: "34px" }}
+                width={1}
+                bg={"gray"}
+                //disabled={EnableBoton()}
+                onClick={async () => {
+                  setLoading(true)
+                    await props.useAcciones.Logger()
+                  setLoading(false)
+                }}
+              >
+                <Text sx={Estilo.mbtn1}>
+                  Entrar
+                </Text>
+              </Button>
+            </Box>
+              {Loading ? <Spinner size={30} ml={3} /> : <div/>}
+          </Flex>
 
-
-              <Box sx={{ width: "70%" }}>
-
-                  <Button sx={{ width: "100%", height: "34px" }}
-                    width={1}
-                    bg={"gray"}
-                    //disabled={EnableBoton()}
-                    onClick={async () => {
-
-                      await props.useAcciones.Logger()
-
-                      // setLoadingSecc(true)
-                      // await props.useAcciones.InfoAdd(props.Referido)
-                      // setLoadingSecc(false)
-                    }}
-                  >
-                     <Text sx={Estilo.mbtn1}>
-                       Entrar
-                      </Text>
-
-                  </Button>
-
-              </Box>
-
-
-              {/* <Box sx={{ width: "70%" }}>
-                  <Button sx={{ width: "100%", height: "34px" }}
-                    width={1}
-                    bg={"gray"}
-                    //disabled={EnableBoton()}
-                    onClick={async () => {
-                      await Logout()
-                    }}
-                  >
-                    <Text sx={Estilo.mbtn1}>
-                      Cerrar Sesión
-                    </Text>
-                  </Button>
-              </Box> */}
-
-          </Grid>
-        }
+        </Grid>
+        
       </Flex>
     )
     

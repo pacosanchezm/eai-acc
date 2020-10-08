@@ -13,12 +13,8 @@ import axios from "axios"
 
 // ------------------
 
-
-  // import UsedataHome from "./usedata"
-
   import Login from "./login"
   import Signup from "./signup"
-
   import usedata from "./usedata"
 
 
@@ -56,13 +52,10 @@ const ContextProvider = ({ children }) => {
   );
 };
 
-
-
 // -----------------------------------------------------------------------------
 
 
 let useAcciones = function(StateContext) {
-
 
   const [LoginName, setLoginName] = useContext(StateContext).User.LoginName;
   const [LoginPass, setLoginPass] = useContext(StateContext).User.LoginPass;
@@ -120,8 +113,6 @@ let useAcciones = function(StateContext) {
 
 
 // -----------------------------------------------------------------------------
-
-
 
 const MenuHeader = props => {
   const [Loading, setLoading] = useContext(StateContext).LoadingSecc1;
@@ -274,11 +265,6 @@ const Body = props => {
 }
 
 // -----------------------------------------------------------------------------
-
-
-
-
-
 
 
 
