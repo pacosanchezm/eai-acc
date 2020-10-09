@@ -22,13 +22,6 @@ const useStateLocal = () => {
     Theme: useState(useContext(createContext(Theme))),
     LoadingSecc1: useState(useContext(createContext(false))),
 
-    User: {
-      Id: useState(useContext(createContext(0))),
-      Name: useState(useContext(createContext(0))),
-      LoginName: useState(useContext(createContext(""))),
-      LoginPass: useState(useContext(createContext(""))),
-    },
-
   };
 };
 
@@ -47,72 +40,71 @@ const ContextProvider = ({ children }) => {
 
 // -----------------------------------------------------------------------------
 
-const Info = props => {
+const Body = props => {
   const Estilo = useThemeUI().theme.styles;
-
   const [Loading, setLoading] = useContext(StateContext).LoadingSecc1;
 
-  const [LoginName, setLoginName] = useContext(StateContext).User.LoginName;
-  const [LoginPass, setLoginPass] = useContext(StateContext).User.LoginPass;
-  const [UserId, setUserId] = useContext(StateContext).User.Id;
-  const [UserName, setUserName] = useContext(StateContext).User.Name;
+  const [LoginName, setLoginName] = props.useContext.User.LoginName;
+  const [LoginPass, setLoginPass] = props.useContext.User.LoginPass;
+  const [UserId, setUserId] = props.useContext.User.Id;
+  const [UserName, setUserName] = props.useContext.User.Name;
 
 
-  let Logger = async function (props) {
+  // let Logger = async function (props) {
 
-    let axapi = await axios({
-      method: "get",
-      headers: { 
-        'Access-Control-Allow-Origin': '*'
-       },
-      url: "/loginp",
-      baseURL: server,
-      params: {
-        username: LoginName,
-        password: LoginPass,
-      }
-    });
+  //   let axapi = await axios({
+  //     method: "get",
+  //     headers: { 
+  //       'Access-Control-Allow-Origin': '*'
+  //      },
+  //     url: "/loginp",
+  //     baseURL: server,
+  //     params: {
+  //       username: LoginName,
+  //       password: LoginPass,
+  //     }
+  //   });
 
-    console.log({axapi})
+  //   console.log({axapi})
 
-    console.log({data: axapi.data})
+  //   console.log({data: axapi.data})
 
-     await setUserId(axapi.data._id)
-     await setUserName(axapi.data.username)
+  //    await setUserId(axapi.data._id)
+  //    await setUserName(axapi.data.username)
 
-    //console.log({UserId, UserName})
-  }
-
-
-  let Logout = async function (props) {
-
-    let axapi = await axios({
-      method: "get",
-      headers: { 
-        'Access-Control-Allow-Origin': '*'
-       },
-      url: "/logout",
-      baseURL: server,
-    });
-
-    await setUserId(0)
-    await setUserName("")
-
-  }
+  //   //console.log({UserId, UserName})
+  // }
 
 
-  const useChange = (Field, setField) => {
-    return {
-      name: Field,
-      value: Field,
-      fontSize: 1,
-      color: "#595959",
-      bg: "#DCDCDC",
-      onChange: e => {
-        setField(e.target.value);
-      }
-    };
-  };
+  // let Logout = async function (props) {
+
+  //   let axapi = await axios({
+  //     method: "get",
+  //     headers: { 
+  //       'Access-Control-Allow-Origin': '*'
+  //      },
+  //     url: "/logout",
+  //     baseURL: server,
+  //   });
+
+  //   await setUserId(0)
+  //   await setUserName("")
+
+  // }
+
+
+  // const useChange = (Field, setField) => {
+  //   return {
+  //     name: Field,
+  //     value: Field,
+  //     fontSize: 1,
+  //     color: "#595959",
+  //     bg: "#DCDCDC",
+  //     onChange: e => {
+  //       setField(e.target.value);
+  //     }
+  //   };
+  // };
 
 
 // ------------
@@ -141,7 +133,7 @@ const Info = props => {
                   <Text sx={Estilo.h2b} >Tel</Text>
                 </Box>
                 <Box sx={{ width: "70%" }}>
-                  <Input {...useChange(LoginName, setLoginName)}/>
+                  <Input {...props.useAcciones.useChange(LoginName, setLoginName)}/>
                 </Box>
               </Flex>
 
@@ -151,7 +143,7 @@ const Info = props => {
                   <Text sx={Estilo.h2b} >Pass</Text>
                 </Box>
                 <Box sx={{ width: "70%" }}>
-                  <Input {...useChange(LoginPass, setLoginPass)}/>
+                  <Input {...props.useAcciones.useChange(LoginPass, setLoginPass)}/>
                 </Box>
               </Flex>
 
@@ -166,12 +158,12 @@ const Info = props => {
                   <Button sx={{ width: "100%", height: "34px" }}
                     width={1}
                     bg={"gray"}
-                    //disabled={LoadingButton1 ? true : false}
-                    // onClick={async () => {
-                    //   setLoadingButton1(true)
-                    //   let MiSignUp = await SignUp()
-                    //   setLoadingButton1(false)
-                    // }}
+                    disabled={Loading ? true : false}
+                    onClick={async () => {
+                      setLoading(true)
+                      let MiSignUp = await props.useAcciones.SignUp()
+                      setLoading(false)
+                    }}
                   >
                      <Text sx={Estilo.mbtn1}>
                        Registrar 
@@ -181,7 +173,7 @@ const Info = props => {
               </Box>
 
               <Box sx={{ width: "30%" }}>
-                {/* {LoadingButton1 ? <Spinner size={17} ml={3} /> : <div/>} */}
+                {Loading ? <Spinner size={30} ml={3} /> : <div/>}
               </Box>
 
 
@@ -214,7 +206,7 @@ export default (App = props => {
       <ContextProvider>
         <Flex>
           <main sx={{width: "100%"}}>
-            <Info {...props} />
+            <Body {...props} />
           </main>
         </Flex>
       </ContextProvider>

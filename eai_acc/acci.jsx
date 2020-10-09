@@ -13,6 +13,9 @@ import axios from "axios"
 
 // ------------------
 
+import Head from "./head"
+
+
   import Login from "./login"
   import Signup from "./signup"
   import usedata from "./usedata"
@@ -54,18 +57,29 @@ const ContextProvider = ({ children }) => {
 
 // -----------------------------------------------------------------------------
 
-
 let useAcciones = function(StateContext) {
+
+  const [Empresa, setEmpresa] = useContext(StateContext).Empresa;
+
 
   const [LoginName, setLoginName] = useContext(StateContext).User.LoginName;
   const [LoginPass, setLoginPass] = useContext(StateContext).User.LoginPass;
   const [UserId, setUserId] = useContext(StateContext).User.Id;
   const [UserName, setUserName] = useContext(StateContext).User.Name;
 
+  const useData = new usedata()
+
+
+
   // ---------------------
   
   return {
-
+    Loader : async function (props) {
+      const res = await axios.get(server + '/logindata')
+      setUserId(res.data.miid)
+      setUserName(res.data.miuser)
+    },
+    
     Logger : async function (props) {
       let axapi = await axios({
         method: "get",
@@ -107,10 +121,33 @@ let useAcciones = function(StateContext) {
       }
     },
 
+    SignUp : async function (props) {
+
+      let Cliente = await useData.Clientes().get({Telefono: LoginName, Empresa: Empresa})
+  
+      if (Cliente.length===0){
+        let InsertCliente = await useData.Clientes().insert({
+          Empresa: Empresa,
+          Origen: "Registro",
+          Telefono: LoginName,
+          Pass: LoginPass,
+        })
+  
+        console.log({InsertCliente})
+        if (InsertCliente>0) {return 1}
+  
+      } else {
+         console.log({Cliente})
+        return 0
+      }
+    
+       // await setUserId(InsertCliente
+      //  await setUserName(LoginName)
+      },
+
+
   }
 }
-
-
 
 // -----------------------------------------------------------------------------
 
@@ -211,6 +248,35 @@ const MenuHeader = props => {
 }
 
 
+// -----------------------------------------------------------------------------
+
+const Headi = props => {
+  const [Loading, setLoading] = useContext(StateContext).LoadingSecc1
+
+ // const useData = new usedata()
+  const useacciones = new useAcciones(StateContext)
+
+// ------------
+
+  useEffect(() => {useacciones.Loader(props) }, [])
+
+// ------------
+  try {
+    return (
+      <Flex sx={{width: "100%" }}>
+
+        <Head default
+          useContext={useContext(StateContext)}
+          // useData = {useData}
+          useAcciones = {useacciones}
+        />
+
+      </Flex>
+    )
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 // -----------------------------------------------------------------------------
 
@@ -219,9 +285,6 @@ const Body = props => {
 
   const useData = new usedata()
   const useacciones = new useAcciones(StateContext)
-
-// -------------
-
 
 // ------------
 
@@ -246,7 +309,11 @@ const Body = props => {
                     useContext={useContext(StateContext)}
                     useAcciones = {useacciones}
                   />
-                  <Signup path="/signup" />
+                  <Signup path="/signup"
+                    useData = {useData}
+                    useContext={useContext(StateContext)}
+                    useAcciones = {useacciones}
+                  />
 
                 </Router>
               </main>
@@ -289,9 +356,11 @@ export default (App = props => {
           css={{ maxWidth: "610px", minWidth: "410px" }}
         >
           <header sx={{width: "100%"}}>
+            <Headi {...props} />
             {/* <Encabezado {...props} /> */}
             <MenuHeader {...props} />
           </header>
+
 
           <main sx={{width: "100%"}}>
             <Body {...props} />

@@ -31,7 +31,7 @@ const ContextProvider = ({ children }) => {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-const Info = props => {
+const Body = props => {
   const Estilo = useThemeUI().theme.styles;
   const [Loading, setLoading] = useContext(StateContext).LoadingSecc1;
 
@@ -122,7 +122,7 @@ export default (App = props => {
       <ContextProvider>
         <Flex>
           <main sx={{width: "100%"}}>
-            <Info {...props} />
+            <Body {...props} />
           </main>
         </Flex>
       </ContextProvider>
