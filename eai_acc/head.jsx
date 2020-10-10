@@ -64,7 +64,7 @@ const Body = props => {
           {Loading ? <Spinner size={17} ml={3} /> : 
               <Flex sx={{ height: "34px", width: "100%" }}>
                 <Box sx={{ width: "100%" }}>
-                 {UserId} - {UserName}
+                 {UserName}
                 </Box>
               </Flex>
           }

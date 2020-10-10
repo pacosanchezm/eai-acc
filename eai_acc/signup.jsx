@@ -7,21 +7,15 @@ import { Flex, Box, Button, Text, Image, Spinner, Grid, Input } from "@theme-ui/
 import Theme from "./theme"
 
 
-
-
 let App;
 const StateContext = createContext();
 
 // ------------------------------------------------------------------
 
-let server = "https://sushifactory.app"
-
-
 const useStateLocal = () => {
   return {
     Theme: useState(useContext(createContext(Theme))),
     LoadingSecc1: useState(useContext(createContext(false))),
-
   };
 };
 
@@ -49,64 +43,6 @@ const Body = props => {
   const [UserId, setUserId] = props.useContext.User.Id;
   const [UserName, setUserName] = props.useContext.User.Name;
 
-
-  // let Logger = async function (props) {
-
-  //   let axapi = await axios({
-  //     method: "get",
-  //     headers: { 
-  //       'Access-Control-Allow-Origin': '*'
-  //      },
-  //     url: "/loginp",
-  //     baseURL: server,
-  //     params: {
-  //       username: LoginName,
-  //       password: LoginPass,
-  //     }
-  //   });
-
-  //   console.log({axapi})
-
-  //   console.log({data: axapi.data})
-
-  //    await setUserId(axapi.data._id)
-  //    await setUserName(axapi.data.username)
-
-  //   //console.log({UserId, UserName})
-  // }
-
-
-  // let Logout = async function (props) {
-
-  //   let axapi = await axios({
-  //     method: "get",
-  //     headers: { 
-  //       'Access-Control-Allow-Origin': '*'
-  //      },
-  //     url: "/logout",
-  //     baseURL: server,
-  //   });
-
-  //   await setUserId(0)
-  //   await setUserName("")
-
-  // }
-
-
-  // const useChange = (Field, setField) => {
-  //   return {
-  //     name: Field,
-  //     value: Field,
-  //     fontSize: 1,
-  //     color: "#595959",
-  //     bg: "#DCDCDC",
-  //     onChange: e => {
-  //       setField(e.target.value);
-  //     }
-  //   };
-  // };
-
-
 // ------------
 
 //useEffect(() => {Loader(props) }, [])
@@ -122,39 +58,31 @@ const Body = props => {
         {Loading ? <Spinner size={17} ml={3} /> : 
 
           <Grid bg="WhiteSmoke" css={{ maxWidth: "610px" }}>
-
             <Flex sx={{ width: "100%" }}>
-
               <Box sx={{ width: "100%" }}>
+                <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
+                  <Box sx={{ width: "20%"}}>
+                    <Text sx={Estilo.h2b} >Tel</Text>
+                  </Box>
+                  <Box sx={{ width: "70%" }}>
+                    <Input {...props.useAcciones.useChange(LoginName, setLoginName)}/>
+                  </Box>
+                </Flex>
 
-
-              <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
-                <Box sx={{ width: "20%"}}>
-                  <Text sx={Estilo.h2b} >Tel</Text>
-                </Box>
-                <Box sx={{ width: "70%" }}>
-                  <Input {...props.useAcciones.useChange(LoginName, setLoginName)}/>
-                </Box>
-              </Flex>
-
-
-              <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
-                <Box sx={{ width: "20%"}}>
-                  <Text sx={Estilo.h2b} >Pass</Text>
-                </Box>
-                <Box sx={{ width: "70%" }}>
-                  <Input {...props.useAcciones.useChange(LoginPass, setLoginPass)}/>
-                </Box>
-              </Flex>
-
+                <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
+                  <Box sx={{ width: "20%"}}>
+                    <Text sx={Estilo.h2b} >Pass</Text>
+                  </Box>
+                  <Box sx={{ width: "70%" }}>
+                    <Input {...props.useAcciones.useChange(LoginPass, setLoginPass)}/>
+                  </Box>
+                </Flex>
               </Box>
 
             </Flex>
 
             <Flex sx={{ width: "100%", alignItems: 'center', mb: 3 }}>
-
               <Box sx={{ width: "70%" }}>
-
                   <Button sx={{ width: "100%", height: "34px" }}
                     width={1}
                     bg={"gray"}
@@ -168,26 +96,17 @@ const Body = props => {
                      <Text sx={Estilo.mbtn1}>
                        Registrar 
                       </Text>
-
                   </Button>
               </Box>
 
               <Box sx={{ width: "30%" }}>
                 {Loading ? <Spinner size={30} ml={3} /> : <div/>}
               </Box>
-
-
             </Flex>
-
-
-
           </Grid>
         }
       </Flex>
-
-
     )
-    
   } catch (e) {
     console.error(e);
   }

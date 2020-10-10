@@ -45,6 +45,49 @@ let usedata = function(StateContextM) {
           if (axdataRes) {return axdataRes} else {return 0}
         },
 
+        insert: async function(e) {
+         
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation insertCliente($Query: ClienteInput) {
+                  ClientesM {
+                    Registro {
+                      InsertCliente(Query: $Query)
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Origen: e.Origen,
+                  Nombre: e.Nombre,
+                  ApellidoPat: e.ApellidoPat,
+                  NombreCompleto: e.NombreCompleto,
+                  Telefono: e.Telefono,
+                  Pass: e.Pass,
+                  Empresa: e.Empresa,
+                  Email: e.Mail,
+                  Obv: e.Obv
+                }
+              }
+            }
+          });
+    
+          let axdataRes = axdata.data.data.ClientesM.Registro.InsertCliente;
+
+          if (axdataRes>0) {return axdataRes} else {return 0}
+        },
+
+
+
+
+
+
+
+
       }
     }
   }

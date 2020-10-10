@@ -36,8 +36,8 @@ const useStateUniv = () => {
     Empresa: useState(useContext(createContext(1))),
 
     User: {
-      Id: useState(useContext(createContext(0))),
-      Name: useState(useContext(createContext(0))),
+      Id: useState(useContext(createContext(""))),
+      Name: useState(useContext(createContext(""))),
       LoginName: useState(useContext(createContext(""))),
       LoginPass: useState(useContext(createContext(""))),
     },
@@ -58,9 +58,7 @@ const ContextProvider = ({ children }) => {
 // -----------------------------------------------------------------------------
 
 let useAcciones = function(StateContext) {
-
   const [Empresa, setEmpresa] = useContext(StateContext).Empresa;
-
 
   const [LoginName, setLoginName] = useContext(StateContext).User.LoginName;
   const [LoginPass, setLoginPass] = useContext(StateContext).User.LoginPass;
@@ -134,16 +132,26 @@ let useAcciones = function(StateContext) {
         })
   
         console.log({InsertCliente})
-        if (InsertCliente>0) {return 1}
+
+
+        if (InsertCliente>0) {
+          await setUserId(InsertCliente)
+          await setUserName(LoginName)
+          
+          return 1
+        
+        }
   
+
+
+
       } else {
          console.log({Cliente})
         return 0
       }
     
-       // await setUserId(InsertCliente
-      //  await setUserName(LoginName)
-      },
+
+    },
 
 
   }
@@ -151,18 +159,13 @@ let useAcciones = function(StateContext) {
 
 // -----------------------------------------------------------------------------
 
-const MenuHeader = props => {
+const MenuHeader2 = props => {
+  const Estilo = useThemeUI().theme.styles;
   const [Loading, setLoading] = useContext(StateContext).LoadingSecc1;
 
   const [UserId, setUserId] = useContext(StateContext).User.Id;
   const [UserName, setUserName] = useContext(StateContext).User.Name;
 // -------------
-
-  let Loader = async function (props) {
-    const res = await axios.get(server + '/logindata');
-    setUserId(res.data.miid)
-    setUserName(res.data.miuser)
-  }
 
 // ------------
 
@@ -173,104 +176,65 @@ const MenuHeader = props => {
 
     return (
 
-      <Flex bg="" sx={{ height: "34px", width: "100%" }}>
-        {Loading ? <Spinner size={17} ml={3} /> : 
-          <header
-            sx={{
-              display: 'grid',
-              gridGap: 3,
-              maxWidth: 768,
-              mx: 'auto',
-              px: 3,
-              py: 3,
-              gridAutoFlow: 'row',
-              gridTemplateColumns: [
-                'repeat(2, 1fr)',
-                'repeat(3, 1fr)',
-              ],
-              variant: 'styles.header',
-            }}>
+      <div
+        sx={{
+          display: 'grid',
+          gridGap: 3,
+          gridTemplateColumns: `repeat(auto-fit, minmax(64px, 1fr))`,
+        }}>
 
+        <Link sx={Estilo.menu1}
+          to='/acc/login' 
+        >
+          Iniciar Sesión
+        </Link>
 
-
-            <div
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-              }}>
-              <Link to='/login'
-                sx={{
-                  //variant: 'styles.navlink',
-                  p: 2,
-                }}>
-                Login
-              </Link>
-              <Link to='/signup'
-                sx={{
-                  // variant: 'styles.navlink',
-                  p: 2,
-                }}>
-                Signup
-              </Link>
-            </div>
-            <div
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                order: 2
-              }}>
-              <Link to='/about'
-                sx={{
-                  variant: 'styles.navlink',
-                  p: 2,
-                }}>
-                About
-              </Link>
-              <Link to='/contact'
-                sx={{
-                  variant: 'styles.navlink',
-                  p: 2,
-                }}>
-                Contact
-              </Link>
-            </div>
-          </header>
-        }
-      </Flex>
-
+        <Link sx={Estilo.menu1}
+          to='/acc/signup'
+        >
+          Registrarse
+        </Link>
+      
+        <Link sx={Estilo.menu1}
+          to='/info'
+        >
+          Mis Datos
+        </Link>
+      
+        <Link sx={Estilo.menu1}
+          to='/orders'
+        >
+          Mis Pedidos
+        </Link>
+      
+      </div>
     )
-    
+
   } catch (e) {
     console.error(e);
   }
 }
 
 
+
+
 // -----------------------------------------------------------------------------
+
 
 const Headi = props => {
   const [Loading, setLoading] = useContext(StateContext).LoadingSecc1
-
- // const useData = new usedata()
   const useacciones = new useAcciones(StateContext)
 
 // ------------
-
-  useEffect(() => {useacciones.Loader(props) }, [])
 
 // ------------
   try {
     return (
       <Flex sx={{width: "100%" }}>
-
         <Head default
           useContext={useContext(StateContext)}
-          // useData = {useData}
           useAcciones = {useacciones}
         />
-
       </Flex>
     )
   } catch (e) {
@@ -288,38 +252,34 @@ const Body = props => {
 
 // ------------
 
-// useEffect(() => {Loader(props) }, [])
-
 // ------------
   try {
 
     return (
 
-      <Flex bg="#000000" sx={{width: "100%" }}>
+      <Flex bg="WhiteSmoke" sx={{width: "100%" }}>
         {Loading ? <Spinner size={17} ml={3} /> : 
           <Flex sx={{width: "100%" }}>
-
             <Box sx={{ width: "100%" }}>
 
               <main>
                 <Router>
                   <Login default
-                    path="/login"  
+                    path="/acc/login"  
                     useData = {useData}
                     useContext={useContext(StateContext)}
                     useAcciones = {useacciones}
                   />
-                  <Signup path="/signup"
+                  <Signup 
+                    path="/acc/signup"
                     useData = {useData}
                     useContext={useContext(StateContext)}
                     useAcciones = {useacciones}
                   />
-
                 </Router>
               </main>
 
             </Box>
-
           </Flex>
         }
       </Flex>
@@ -345,22 +305,20 @@ export default (App = props => {
     <div style={{display: 'flex', justifyContent: 'center'}}>
 
       <ContextProvider>
-        <Flex bg="DimGrey"
+        <Flex bg="WhiteSmoke"
           sx={{
             display: "flex",
             flexDirection: "column",
             // set this to `minHeight: '100vh'` for full viewport height
-            minHeight: '100vh',
+            //minHeight: '100vh',
             justifyContent: 'center'
           }}
-          css={{ maxWidth: "610px", minWidth: "410px" }}
+          css={{ maxWidth: "768px", minWidth: "410px" }}
         >
           <header sx={{width: "100%"}}>
             <Headi {...props} />
-            {/* <Encabezado {...props} /> */}
-            <MenuHeader {...props} />
+            <MenuHeader2 {...props} />
           </header>
-
 
           <main sx={{width: "100%"}}>
             <Body {...props} />
